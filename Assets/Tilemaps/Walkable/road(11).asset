@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+  m_Script: {fileID: 11500000, guid: 37221c6826321c847a1f36b5d40ba9b0, type: 3}
   m_Name: road(11)
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: 8fb46fff96313844bb5742e7e1e2e546, type: 3}
@@ -33,4 +33,6 @@ MonoBehaviour:
     e33: 1
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
-  m_ColliderType: 1
+  m_ColliderType: 2
+  baseMovementCost: 0
+  directions: 0200000003000000
