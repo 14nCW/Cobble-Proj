@@ -6,17 +6,21 @@ public class PathfindingAlgorithm : MonoBehaviour
 {
     public Tilemap walkableTilemap;
     public GenericDictionary<tileDirections, Vector3> directionVectors;
+    public float appriximity = 0.001f;
+
+    private Vector3 endWorldPos;
 
     List<AStarNode> openSet = new List<AStarNode>();
-    HashSet<AStarNode> closedSet = new HashSet<AStarNode>();
-    List<Vector3> path = new List<Vector3>();
+    List<AStarNode> closedSet = new List<AStarNode>();
+    //HashSet<Vector3> closedVector3Set = new HashSet<Vector3>();
+    public List<Vector3> path = new List<Vector3>();
 
     public class AStarNode
     {
         public TopologyTile tile;
-        public int F;
-        public int G;
-        public int H;
+        public float F;
+        public float G;
+        public float H;
         public Vector3 position;
         public AStarNode parent;
     }
@@ -27,8 +31,10 @@ public class PathfindingAlgorithm : MonoBehaviour
         closedSet.Clear();
         path.Clear();
 
-        Vector3 startWorldPos = new Vector3(start.x, start.y, 0);
-        Vector3 endWorldPos = new Vector3(end.x, end.y, 0);
+        AStarNode finalNode = new AStarNode { };
+
+        Vector3 startWorldPos = start;
+        Vector3 endWorldPos = end;
 
         Vector3Int startCellPos = walkableTilemap.WorldToCell(startWorldPos);
         Vector3Int endCellPos = walkableTilemap.WorldToCell(endWorldPos);
@@ -54,7 +60,7 @@ public class PathfindingAlgorithm : MonoBehaviour
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 
-            if (currentNode.tile == endTile)
+            if (CheckIfIsCloseEnough(currentNode.position, endWorldPos))
             {
                 ReconstructPath(currentNode);
                 Debug.Log("Path found!");
@@ -66,6 +72,15 @@ public class PathfindingAlgorithm : MonoBehaviour
 
         Debug.Log("No path found!");
         return path;
+    }
+
+    private bool CheckIfIsCloseEnough(Vector3 position, Vector3 end)
+    {
+        if (Mathf.Abs(position.x - end.x) < appriximity && Mathf.Abs(position.y - end.y) < appriximity)
+        {
+            return true;
+        }
+        return false;
     }
 
     private void ReconstructPath(AStarNode node)
@@ -88,19 +103,19 @@ public class PathfindingAlgorithm : MonoBehaviour
 
             TopologyTile neighbour = walkableTilemap.GetTile<TopologyTile>(neighbourCellPos);
 
-            if (neighbour != null)
+            if (neighbour != null && !closedSet.Exists(node => node.position == neighbourPosition))
             {
                 AStarNode neighbourNode = new AStarNode
                 {
                     tile = neighbour,
-                    G = parent.G + 1,
-                    H = CalculateHeuristic(neighbourPosition, parent.position),
-                    F = parent.G + 1 + CalculateHeuristic(neighbourPosition, parent.position),
+                    G = parent.G + 0.5197f,
+                    H = CalculateHeuristic(neighbourPosition, endWorldPos),
+                    F = parent.G + 0.5197f + CalculateHeuristic(neighbourPosition, parent.position),
                     position = neighbourPosition,
                     parent = parent
                 };
 
-                if (!openSet.Contains(neighbourNode))
+                if (!openSet.Exists(node => node.position == neighbourNode.position))
                 {
                     openSet.Add(neighbourNode);
                 }
@@ -108,9 +123,9 @@ public class PathfindingAlgorithm : MonoBehaviour
         }
     }
 
-    private int CalculateHeuristic(Vector3 start, Vector3 end)
+    private float CalculateHeuristic(Vector3 start, Vector3 end)
     {
-        return Mathf.FloorToInt(Vector3.Distance(start, end));
+        return Vector3.Distance(start, end);
     }
 
     private AStarNode GetLowestF(List<AStarNode> list)

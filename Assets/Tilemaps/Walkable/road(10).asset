@@ -34,5 +34,4 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 2
-  baseMovementCost: 0
   directions: 0000000001000000

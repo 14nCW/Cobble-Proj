@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 
 public class TopologyTile : Tile
 {
-    public int baseMovementCost;
     public List<tileDirections> directions;
 }
 
