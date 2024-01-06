@@ -28,13 +28,22 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             ""id"": ""af50c9eb-ef62-4e38-bba6-2e5807ff21bc"",
             ""actions"": [
                 {
-                    ""name"": ""Mouse"",
+                    ""name"": ""Pointer"",
                     ""type"": ""Button"",
                     ""id"": ""08d5a4fd-61b7-4913-a187-19e8ab4db0ef"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""cb9e16c4-f5c8-4b13-82e0-6ca5798e5d77"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -45,7 +54,18 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mouse"",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8df15cef-68a0-4533-9de1-10e078406b5c"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -56,7 +76,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
+        m_Gameplay_Pointer = m_Gameplay.FindAction("Pointer", throwIfNotFound: true);
+        m_Gameplay_Position = m_Gameplay.FindAction("Position", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -118,12 +139,14 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Mouse;
+    private readonly InputAction m_Gameplay_Pointer;
+    private readonly InputAction m_Gameplay_Position;
     public struct GameplayActions
     {
         private @InputSystem m_Wrapper;
         public GameplayActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
+        public InputAction @Pointer => m_Wrapper.m_Gameplay_Pointer;
+        public InputAction @Position => m_Wrapper.m_Gameplay_Position;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -133,16 +156,22 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Mouse.started += instance.OnMouse;
-            @Mouse.performed += instance.OnMouse;
-            @Mouse.canceled += instance.OnMouse;
+            @Pointer.started += instance.OnPointer;
+            @Pointer.performed += instance.OnPointer;
+            @Pointer.canceled += instance.OnPointer;
+            @Position.started += instance.OnPosition;
+            @Position.performed += instance.OnPosition;
+            @Position.canceled += instance.OnPosition;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Mouse.started -= instance.OnMouse;
-            @Mouse.performed -= instance.OnMouse;
-            @Mouse.canceled -= instance.OnMouse;
+            @Pointer.started -= instance.OnPointer;
+            @Pointer.performed -= instance.OnPointer;
+            @Pointer.canceled -= instance.OnPointer;
+            @Position.started -= instance.OnPosition;
+            @Position.performed -= instance.OnPosition;
+            @Position.canceled -= instance.OnPosition;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -162,6 +191,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnMouse(InputAction.CallbackContext context);
+        void OnPointer(InputAction.CallbackContext context);
+        void OnPosition(InputAction.CallbackContext context);
     }
 }

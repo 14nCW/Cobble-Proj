@@ -12,7 +12,6 @@ public class PathfindingAlgorithm : MonoBehaviour
 
     List<AStarNode> openSet = new List<AStarNode>();
     List<AStarNode> closedSet = new List<AStarNode>();
-    //HashSet<Vector3> closedVector3Set = new HashSet<Vector3>();
     public List<Vector3> path = new List<Vector3>();
 
     public class AStarNode

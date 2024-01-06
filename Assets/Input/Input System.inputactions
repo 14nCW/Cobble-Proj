@@ -6,13 +6,22 @@
             "id": "af50c9eb-ef62-4e38-bba6-2e5807ff21bc",
             "actions": [
                 {
-                    "name": "Mouse",
+                    "name": "Pointer",
                     "type": "Button",
                     "id": "08d5a4fd-61b7-4913-a187-19e8ab4db0ef",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "cb9e16c4-f5c8-4b13-82e0-6ca5798e5d77",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -23,7 +32,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mouse",
+                    "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8df15cef-68a0-4533-9de1-10e078406b5c",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
