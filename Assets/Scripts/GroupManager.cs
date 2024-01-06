@@ -32,8 +32,14 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
         leader.MoveTo(path);
     }
 
-    public void MoveFollowers(Vector3 direction)
+    public void MoveFollowers(Vector3 leaderPosision)
     {
-
+        foreach (Character c in characters)
+        {
+            if (c != leader)
+            {
+                c.MoveTo(leaderPosision);
+            }
+        }
     }
 }

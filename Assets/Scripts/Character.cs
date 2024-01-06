@@ -9,6 +9,7 @@ public class Character : MonoBehaviour, ICharacterMovement
 
 
     private Tween moveLeaderTween;
+    private Tween moveFollowerTween;
     private void Awake()
     {
         GroupManager.Instance.characters.Add(this);
@@ -24,7 +25,10 @@ public class Character : MonoBehaviour, ICharacterMovement
         }
         else
         {
+            if (moveFollowerTween != null) moveFollowerTween.Kill();
+            Vector3 targetPosition = (Vector3)(object)direction; // Convert to Vector3
 
+            moveFollowerTween = this.transform.DOMove(targetPosition, characterInformation.speed);
         }
     }
 
@@ -34,6 +38,10 @@ public class Character : MonoBehaviour, ICharacterMovement
 
         if (moveLeaderTween != null) moveLeaderTween.Kill();
 
-        moveLeaderTween = this.transform.DOMove(path[index], characterInformation.speed).OnComplete(() => MoveLeader(index + 1));
+        moveLeaderTween = this.transform.DOMove(path[index], characterInformation.speed).OnComplete(() =>
+            {
+                GroupManager.Instance.MoveFollowers(this.transform.position);
+                MoveLeader(index + 1);
+            });
     }
 }
