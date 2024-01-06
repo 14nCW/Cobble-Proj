@@ -20,12 +20,20 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
 
     public void ChangeLeader(Character character)
     {
+        if (leader.isMoving)
+        {
+            Debug.Log("Leader is moving. Can't nominate a new one");
+            return;
+        }
+
         leader = character;
 
         foreach (Character c in characters)
         {
             c.spriteRenderer.sprite = (c.gameObject != character) ? followerSprite : leaderSprite;
         }
+
+        leader.spriteRenderer.sprite = leaderSprite;
     }
 
     public void MoveLeader(List<Vector3> path)

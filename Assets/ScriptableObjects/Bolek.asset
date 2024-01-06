@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93dcdef35a5d88e45983d5e0504c5d1c, type: 3}
-  m_Name: Antek
+  m_Name: Bolek
   m_EditorClassIdentifier: 
-  characterName: 
-  moveTime: 0.50326085
-  agility: 5.229651
-  endurance: 2.557252
+  moveTime: 0
+  agility: 0
+  endurance: 0
