@@ -6,6 +6,7 @@ public class Character : MonoBehaviour, ICharacterMovement
 {
     public CharacterInformation characterInformation;
     private List<Vector3> path;
+    public SpriteRenderer spriteRenderer;
 
 
     private Tween moveLeaderTween;

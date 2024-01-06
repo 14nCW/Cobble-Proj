@@ -10,11 +10,12 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
     public Sprite followerSprite;
 
     public Character leader { get; private set; }
+    public float radiusAroundLeader = 0.15f;
 
     private void Start()
     {
         leader = characters[Random.Range(0, characters.Count)];
-        leader.GetComponent<SpriteRenderer>().sprite = leaderSprite;
+        leader.spriteRenderer.sprite = leaderSprite;
     }
 
     public void ChangeLeader(Character character)
@@ -23,7 +24,7 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
 
         foreach (Character c in characters)
         {
-            c.GetComponent<SpriteRenderer>().sprite = (c.gameObject != character) ? followerSprite : leaderSprite;
+            c.spriteRenderer.sprite = (c.gameObject != character) ? followerSprite : leaderSprite;
         }
     }
 
@@ -34,12 +35,39 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
 
     public void MoveFollowers(Vector3 leaderPosision)
     {
+        List<Vector3> targetPositionList = GetPossisionAroundLeader(leaderPosision, radiusAroundLeader);
+        int targetPositionIndex = 0;
+
         foreach (Character c in characters)
         {
             if (c != leader)
             {
-                c.MoveTo(leaderPosision);
+                c.MoveTo(targetPositionList[targetPositionIndex]);
+                targetPositionIndex++;
             }
         }
+    }
+
+    private List<Vector3> GetPossisionAroundLeader(Vector3 leaderPosition, float distance)
+    {
+        List<Vector3> positionList = new List<Vector3>();
+
+        int numberOfFollowers = characters.Count - 1;
+
+        for (int i = 0; i < numberOfFollowers; i++)
+        {
+            float angle = i * (360f / numberOfFollowers);
+
+            Vector3 dir = ApplyRotationToVector(new Vector3(1, 0), angle);
+            Vector3 position = leaderPosition + dir * distance;
+            positionList.Add(position);
+        }
+
+        return positionList;
+    }
+
+    private Vector3 ApplyRotationToVector(Vector3 vector, float angle)
+    {
+        return Quaternion.Euler(0, 0, angle) * vector;
     }
 }
