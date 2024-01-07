@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93dcdef35a5d88e45983d5e0504c5d1c, type: 3}
   m_Name: Bolek
   m_EditorClassIdentifier: 
-  moveTime: 0
-  agility: 0
-  endurance: 0
+  characterName: Bolek
+  moveTime: 0.32826322
+  agility: 2.9999676
+  endurance: 4.8068595

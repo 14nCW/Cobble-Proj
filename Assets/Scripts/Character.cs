@@ -29,7 +29,7 @@ public class Character : MonoBehaviour, ICharacterMovement
         else
         {
             if (moveFollowerTween != null) moveFollowerTween.Kill();
-            Vector3 targetPosition = (Vector3)(object)direction; // Convert to Vector3
+            Vector3 targetPosition = (Vector3)(object)direction;
 
             moveFollowerTween = this.transform.DOMove(targetPosition, characterInformation.moveTime);
         }

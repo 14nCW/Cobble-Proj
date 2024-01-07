@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,10 +13,13 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
     public Character leader { get; private set; }
     public float radiusAroundLeader = 0.15f;
 
+    public CinemachineVirtualCamera virtualCamera;
+
     private void Start()
     {
         leader = characters[Random.Range(0, characters.Count)];
         leader.spriteRenderer.sprite = leaderSprite;
+        virtualCamera.Follow = leader.transform;
     }
 
     public void ChangeLeader(Character character)
@@ -34,6 +38,7 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
         }
 
         leader.spriteRenderer.sprite = leaderSprite;
+        virtualCamera.Follow = leader.transform;
     }
 
     public void MoveLeader(List<Vector3> path)

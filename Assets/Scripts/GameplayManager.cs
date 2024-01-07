@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
@@ -9,10 +10,6 @@ public class GameplayManager : MonoBehaviourSingleton<GameplayManager>
     private InputSystem inputSystem;
 
     public Tilemap walkableTilemap;
-
-
-    public GameObject test;
-    private List<GameObject> gameObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -33,6 +30,8 @@ public class GameplayManager : MonoBehaviourSingleton<GameplayManager>
 
     private void OnLeftClick(InputAction.CallbackContext result)
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(inputSystem.Gameplay.Position.ReadValue<Vector2>()), Vector2.zero);
 
         if (hit == false) return;
