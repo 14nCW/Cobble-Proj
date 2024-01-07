@@ -63,7 +63,6 @@ public class PathfindingAlgorithm : MonoBehaviour
             {
                 ReconstructPath(currentNode);
                 Debug.Log("Path found!");
-                path.RemoveAt(0);
                 return path;
             }
 
