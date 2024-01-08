@@ -1,17 +1,27 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour, ICharacterMovement
 {
+    [Header("References")]
     public CharacterInformation characterInformation;
-    private List<Vector3> path;
     public SpriteRenderer spriteRenderer;
-    private float baseMoveSpeed = 1;
+
+    [Header("Information")]
     public bool isMoving = false;
 
+    [Header("Unity Events")]
+    public UnityEvent OnLeaderMove;
+    public UnityEvent OnFollowerMove;
+
+
+
+    private List<Vector3> path;
     private Tween moveLeaderTween;
     private Tween moveFollowerTween;
+
     private void Awake()
     {
         GroupManager.Instance.characters.Add(this);
@@ -31,7 +41,7 @@ public class Character : MonoBehaviour, ICharacterMovement
             if (moveFollowerTween != null) moveFollowerTween.Kill();
             Vector3 targetPosition = (Vector3)(object)direction;
 
-            moveFollowerTween = this.transform.DOMove(targetPosition, characterInformation.moveTime);
+            moveFollowerTween = this.transform.DOMove(targetPosition, characterInformation.moveTime).OnComplete(() => OnFollowerMove?.Invoke());
         }
     }
 
@@ -47,6 +57,7 @@ public class Character : MonoBehaviour, ICharacterMovement
 
         moveLeaderTween = this.transform.DOMove(path[index], characterInformation.moveTime).OnComplete(() =>
             {
+                OnLeaderMove?.Invoke();
                 GroupManager.Instance.MoveFollowers(this.transform.position);
                 MoveLeader(index + 1);
             });

@@ -1,19 +1,24 @@
 using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GroupManager : MonoBehaviourSingleton<GroupManager>
 {
-    public List<Character> characters;
+    [Header("References")]
+    [HideInInspector] public List<Character> characters;
+    public CinemachineVirtualCamera virtualCamera;
+    public Character leader { get; private set; }
+
+    [Header("Configuration")]
+    public float radiusAroundLeader = 0.15f;
 
     [Header("Sprites")]
     public Sprite leaderSprite;
     public Sprite followerSprite;
 
-    public Character leader { get; private set; }
-    public float radiusAroundLeader = 0.15f;
-
-    public CinemachineVirtualCamera virtualCamera;
+    [Header("Unity Events")]
+    public UnityEvent OnLeaderChange;
 
     private void Start()
     {
@@ -39,6 +44,8 @@ public class GroupManager : MonoBehaviourSingleton<GroupManager>
 
         leader.spriteRenderer.sprite = leaderSprite;
         virtualCamera.Follow = leader.transform;
+
+        OnLeaderChange?.Invoke();
     }
 
     public void MoveLeader(List<Vector3> path)

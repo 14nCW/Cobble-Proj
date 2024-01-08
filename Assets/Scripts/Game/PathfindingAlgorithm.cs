@@ -1,18 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class PathfindingAlgorithm : MonoBehaviour
 {
+    [Header("References")]
     public Tilemap walkableTilemap;
+
+    [Header("Configuration")]
     public GenericDictionary<tileDirections, Vector3> directionVectors;
     public float appriximity = 0.001f;
 
-    private Vector3 endWorldPos;
-
-    List<AStarNode> openSet = new List<AStarNode>();
-    List<AStarNode> closedSet = new List<AStarNode>();
+    [Header("Information")]
     public List<Vector3> path = new List<Vector3>();
+
+    [Header("Unity Events")]
+    public UnityEvent OnPathFound;
+    public UnityEvent OnPathNotFound;
+
+    List<AStarNode> closedSet = new List<AStarNode>();
+    List<AStarNode> openSet = new List<AStarNode>();
+    private Vector3 endWorldPos;
 
     public class AStarNode
     {
@@ -63,6 +72,7 @@ public class PathfindingAlgorithm : MonoBehaviour
             {
                 ReconstructPath(currentNode);
                 Debug.Log("Path found!");
+                OnPathFound?.Invoke();
                 return path;
             }
 
@@ -70,6 +80,7 @@ public class PathfindingAlgorithm : MonoBehaviour
         }
 
         Debug.Log("No path found!");
+        OnPathNotFound?.Invoke();
         return path;
     }
 

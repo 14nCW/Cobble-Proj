@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
-    public Character character;
+    [Header("References")]
     public TextMeshProUGUI buttonName;
+    public Character character;
 
     private void Awake()
     {

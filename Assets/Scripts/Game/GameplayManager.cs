@@ -6,10 +6,11 @@ using UnityEngine.Tilemaps;
 
 public class GameplayManager : MonoBehaviourSingleton<GameplayManager>
 {
+    [Header("References")]
     public PathfindingAlgorithm AStar;
-    private InputSystem inputSystem;
-
     public Tilemap walkableTilemap;
+
+    private InputSystem inputSystem;
 
     private void Awake()
     {

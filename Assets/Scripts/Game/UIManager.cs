@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviourSingleton<UIManager>
 {
+    [Header("References")]
     public List<ButtonController> buttons;
 
     [Header("Colors")]
